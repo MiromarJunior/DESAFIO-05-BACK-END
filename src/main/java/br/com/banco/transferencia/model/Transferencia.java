@@ -29,7 +29,7 @@ public class Transferencia {
     private Long id;
 
     @Column(nullable = false)
-    private  LocalDateTime dataTransferencia;
+    private  LocalDate dataTransferencia;
 
     @Column(scale = 2, precision = 20,nullable = false)
     private BigDecimal valor;

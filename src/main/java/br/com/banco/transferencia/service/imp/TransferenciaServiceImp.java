@@ -1,5 +1,8 @@
 package br.com.banco.transferencia.service.imp;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +48,20 @@ public class TransferenciaServiceImp implements TransferenciaService {
                         "Não foi encontrado nenhuma conta com o Nr : " +id));
 
        
+    }
+
+    @Override
+    public List<Transferencia> getAllBydataTransferenciaByConta(Long id,LocalDate dtTransferencia) {
+       Conta contaSelecionada =   getContaById(id);
+       List<Transferencia> transferencias = respository.findAllByDataTransferenciaAndConta(dtTransferencia,contaSelecionada);
+        return transferencias;
+    }
+
+        public List<Transferencia> buscarTransferenciasPorIntervaloDataEConta(LocalDate dataInicio, LocalDate dataFim, Long contaId) {
+        LocalDateTime dataInicioDateTime = LocalDateTime.of(dataInicio, LocalTime.MIN);
+        LocalDateTime dataFimDateTime = LocalDateTime.of(dataFim, LocalTime.MAX);
+        List<Transferencia> transferencias = respository.findAllByIntervaloDataAndConta(dataInicioDateTime.toLocalDate(), dataFimDateTime.toLocalDate(), contaId);
+        return transferencias;
     }
 
     

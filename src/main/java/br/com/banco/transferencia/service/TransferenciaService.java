@@ -1,5 +1,7 @@
 package br.com.banco.transferencia.service;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import br.com.banco.conta.model.Conta;
@@ -10,6 +12,8 @@ public interface TransferenciaService {
      List<Transferencia> getAllTransferencia();
 
      List<Transferencia> getAllTransferenciaByConta(Long id);
+
+      List<Transferencia> getAllBydataTransferenciaByConta(Long id, LocalDate dtTransferencia);
 
      Conta getContaById(Long id);
 
