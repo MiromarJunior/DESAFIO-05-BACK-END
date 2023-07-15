@@ -1,8 +1,6 @@
 package br.com.banco.transferencia.service.imp;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,43 +27,48 @@ public class TransferenciaServiceImp implements TransferenciaService {
     public List<Transferencia> getAllTransferencia() {
         List<Transferencia> transferencias = respository.findAll();
         return transferencias;
-        
- 
+
     }
 
     @Override
     public List<Transferencia> getAllTransferenciaByConta(Long id) {
-     Conta contaSelecionada =   getContaById(id);
-    List<Transferencia> transferencias = respository.findAllByConta(contaSelecionada);
-    return transferencias;
+        Conta contaSelecionada = getContaById(id);
+        List<Transferencia> transferencias = respository.findAllByConta(contaSelecionada);
+        return transferencias;
 
     }
 
     @Override
     public Conta getContaById(Long id) {
-        return contaRepository.findById(id)
-        .orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND,
-                        "Não foi encontrado nenhuma conta com o Nr : " +id));
-
-       
+      Conta conta =  contaRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND,
+                        "Não foi encontrado nenhuma conta com o Nr : " + id));
+return conta;
     }
 
     @Override
-    public List<Transferencia> getAllBydataTransferenciaByConta(Long id,LocalDate dtTransferencia) {
-       Conta contaSelecionada =   getContaById(id);
-       List<Transferencia> transferencias = respository.findAllByDataTransferenciaAndConta(dtTransferencia,contaSelecionada);
+    public List<Transferencia> getAllBydataTransferenciaByConta(String dataInicioString, String dataFimString,
+            Long contaId) {
+
+        LocalDateTime dataInicio = null;
+        LocalDateTime dataFim = null;
+
+        if (!dataFimString.isEmpty()) {
+            dataFim = LocalDateTime.parse(dataFimString.trim() + "T23:59:59");
+        }
+        if (!dataInicioString.isEmpty()) {
+            dataInicio = LocalDateTime.parse(dataInicioString.trim() + "T00:00:00");
+        }
+
+        if (dataFim == null && dataInicio == null) {
+            return getAllTransferenciaByConta(contaId);
+        }
+        if (dataFim == null) {
+            dataFim = LocalDateTime.now();
+        }
+
+        List<Transferencia> transferencias = respository.findAllByIntervaloDataAndConta(dataInicio, dataFim, contaId);
         return transferencias;
     }
 
-        public List<Transferencia> buscarTransferenciasPorIntervaloDataEConta(LocalDate dataInicio, LocalDate dataFim, Long contaId) {
-        LocalDateTime dataInicioDateTime = LocalDateTime.of(dataInicio, LocalTime.MIN);
-        LocalDateTime dataFimDateTime = LocalDateTime.of(dataFim, LocalTime.MAX);
-        List<Transferencia> transferencias = respository.findAllByIntervaloDataAndConta(dataInicioDateTime.toLocalDate(), dataFimDateTime.toLocalDate(), contaId);
-        return transferencias;
-    }
-
-    
-
-
-    
 }

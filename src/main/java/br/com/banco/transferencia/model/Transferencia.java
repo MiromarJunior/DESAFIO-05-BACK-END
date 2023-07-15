@@ -1,10 +1,7 @@
 package br.com.banco.transferencia.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Locale;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -29,7 +26,7 @@ public class Transferencia {
     private Long id;
 
     @Column(nullable = false)
-    private  LocalDate dataTransferencia;
+    private  LocalDateTime dataTransferencia;
 
     @Column(scale = 2, precision = 20,nullable = false)
     private BigDecimal valor;
