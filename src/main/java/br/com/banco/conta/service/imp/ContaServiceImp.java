@@ -22,5 +22,11 @@ public class ContaServiceImp implements ContaService{
         return contas;
     
     }
+
+    @Override
+    public Boolean getContaById(Long id) {
+        return repository.findById(id).isPresent();
+    }
+       
     
 }

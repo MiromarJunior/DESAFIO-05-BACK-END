@@ -7,6 +7,8 @@ import br.com.banco.conta.model.Conta;
 public interface ContaService {
 
     List<Conta> getAllConta();
+
+    Boolean getContaById(Long id);
     
     
 }

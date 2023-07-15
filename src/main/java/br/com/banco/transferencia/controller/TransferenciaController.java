@@ -20,11 +20,7 @@ public class TransferenciaController {
     @Autowired
     TransferenciaServiceImp service;
 
-    // @GetMapping
-    // public ResponseEntity<List<Transferencia>> getAllTransferencia(){
-    // List<Transferencia> transferencias = service.getAllTransferencia();
-    // return ResponseEntity.ok().body(transferencias);
-    // }
+
 
     @GetMapping("/conta/{idConta}")
     public ResponseEntity<List<Transferencia>> getAllTransferenciaByConta(@PathVariable(name = "idConta") Long id) {
@@ -36,9 +32,11 @@ public class TransferenciaController {
     public ResponseEntity<List<Transferencia>> getAllTransferenciaByContaDtTransferencia(
             @RequestParam(name = "idConta") Long contaId,
             @RequestParam(name = "dataInicio") String dataInicioString,
-            @RequestParam(name = "dataFim") String dataFimString) {
-
-        List<Transferencia> transferencias = service.getAllBydataTransferenciaByConta(dataInicioString, dataFimString, contaId);
+            @RequestParam(name = "dataFim") String dataFimString,
+            @RequestParam(name = "nomeOperadorTransacao") String nomeOperadorTransacao
+            ) {
+System.out.println(dataInicioString);
+        List<Transferencia> transferencias = service.getAllBydataTransferenciaByConta(dataInicioString, dataFimString, contaId,nomeOperadorTransacao);
         return ResponseEntity.ok().body(transferencias);
     }
 
