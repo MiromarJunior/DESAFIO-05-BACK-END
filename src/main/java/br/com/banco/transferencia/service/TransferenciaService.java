@@ -20,6 +20,8 @@ public interface TransferenciaService {
 
      List<Transferencia> getAllTransferenciaByNomeOperadorTransacao(String nomeOperadorTransacao, Long contaId);
 
+     Double saldoTotalConta(Long contaId);
+
 
     
 }

@@ -25,8 +25,11 @@ public interface TransferenciaRepository extends JpaRepository<Transferencia,Lon
       @Param("contaId") Long contaId, @Param("nomeOperadorTransacao") String nomeOperadorTransacao);
 
      
-      @Query("SELECT t FROM Transferencia t WHERE t.nomeOperadorTransacao = :nomeOperadorTransacao AND t.conta.id = :contaId")
+      @Query("SELECT t FROM Transferencia t WHERE UPPER(t.nomeOperadorTransacao) = UPPER(:nomeOperadorTransacao) AND t.conta.id = :contaId")
       List<Transferencia> findByNomeOperadorTransacaoAndConta(@Param("nomeOperadorTransacao") String nomeOperadorTransacao, @Param("contaId") Long contaId);
+
+      @Query("SELECT SUM(t.valor) FROM Transferencia t WHERE t.conta.id = :contaId")
+      Double sumValorByContaId(Long contaId);
 
     
 }

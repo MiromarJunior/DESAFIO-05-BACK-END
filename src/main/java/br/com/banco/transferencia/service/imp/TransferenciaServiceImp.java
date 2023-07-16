@@ -97,4 +97,10 @@ public class TransferenciaServiceImp implements TransferenciaService {
         return transferencias;
     }
 
+    @Override
+    public Double saldoTotalConta(Long contaId) {
+        return respository.sumValorByContaId(contaId);
+
+    }
+
 }

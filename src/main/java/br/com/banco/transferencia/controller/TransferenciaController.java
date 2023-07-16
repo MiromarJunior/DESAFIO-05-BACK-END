@@ -35,9 +35,14 @@ public class TransferenciaController {
             @RequestParam(name = "dataFim") String dataFimString,
             @RequestParam(name = "nomeOperadorTransacao") String nomeOperadorTransacao
             ) {
-System.out.println(dataInicioString);
+
         List<Transferencia> transferencias = service.getAllBydataTransferenciaByConta(dataInicioString, dataFimString, contaId,nomeOperadorTransacao);
         return ResponseEntity.ok().body(transferencias);
+    }
+    @GetMapping("/conta/saldo/{idConta}")
+    public ResponseEntity<Double> getSaldoTotalConta(@PathVariable(name = "idConta") Long id) {
+        Double  saldoTotal = service.saldoTotalConta(id);
+        return ResponseEntity.ok().body(saldoTotal);
     }
 
 }
