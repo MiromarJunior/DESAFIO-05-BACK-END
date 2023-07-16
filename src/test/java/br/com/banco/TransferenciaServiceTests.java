@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 
 import br.com.banco.transferencia.model.Transferencia;
 import br.com.banco.transferencia.respository.TransferenciaRepository;
@@ -41,18 +42,18 @@ public class TransferenciaServiceTests {
         // Adicione transferências de exemplo à lista de transferências esperada, se necessário
 
         // Configuração do comportamento simulado do repositório
-        when(repository.findAllByIntervaloDataAndConta(dataInicio, dataFim, contaId))
-                .thenReturn(expectedTransferencias);
+        when(repository.findAllByIntervaloDataAndConta(dataInicio, dataFim, contaId, null))
+                .thenReturn((Page<Transferencia>) expectedTransferencias);
 
         // Chamar o método a ser testado
-        List<Transferencia> result = service.getAllBydataTransferenciaByConta(dataInicioString, dataFimString, contaId, nomeOperadorTransacao);
+        Page<Transferencia> result = service.getAllBydataTransferenciaByConta(dataInicioString, dataFimString, contaId, nomeOperadorTransacao, null);
 
         // Verificar o resultado
         assertThat(result).isNotNull();
         assertThat(result).isEqualTo(expectedTransferencias);
 
         // Verificar se o método do repositório foi chamado corretamente
-        verify(repository, times(1)).findAllByIntervaloDataAndNomeOperadorAndConta(dataInicio, dataFim, contaId, nomeOperadorTransacao);
+        verify(repository, times(1)).findAllByIntervaloDataAndNomeOperadorAndConta(dataInicio, dataFim, contaId, nomeOperadorTransacao, null);
     }
 
 

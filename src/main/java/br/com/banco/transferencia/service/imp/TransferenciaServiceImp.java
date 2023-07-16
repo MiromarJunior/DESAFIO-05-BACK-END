@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,9 +33,9 @@ public class TransferenciaServiceImp implements TransferenciaService {
     }
 
     @Override
-    public List<Transferencia> getAllTransferenciaByConta(Long id) {
+    public Page<Transferencia> getAllTransferenciaByConta(Long id,Pageable pageable) {
         Conta contaSelecionada = getContaById(id);
-        List<Transferencia> transferencias = respository.findAllByConta(contaSelecionada);
+        Page<Transferencia> transferencias = respository.findAllByConta(contaSelecionada,pageable);
         return transferencias;
 
     }
@@ -47,8 +49,8 @@ public class TransferenciaServiceImp implements TransferenciaService {
     }
 
     @Override
-    public List<Transferencia> getAllBydataTransferenciaByConta(String dataInicioString, String dataFimString,
-            Long contaId, String nomeOperadorTransacao) {
+    public Page<Transferencia> getAllBydataTransferenciaByConta(String dataInicioString, String dataFimString,
+            Long contaId, String nomeOperadorTransacao,Pageable pageable) {
 
         LocalDateTime dataInicio = null;
         LocalDateTime dataFim = null;
@@ -61,11 +63,11 @@ public class TransferenciaServiceImp implements TransferenciaService {
         }
 
         if (dataFim == null && dataInicio == null && nomeOperadorTransacao.isEmpty()) {
-            return getAllTransferenciaByConta(contaId);
+            return getAllTransferenciaByConta(contaId,pageable);
         }
 
         if (dataFim == null && dataInicio == null && !nomeOperadorTransacao.isEmpty()) {
-            return getAllTransferenciaByNomeOperadorTransacao(nomeOperadorTransacao.trim(), contaId);
+            return getAllTransferenciaByNomeOperadorTransacao(nomeOperadorTransacao.trim(), contaId,pageable);
         }
 
         if (dataFim == null) {
@@ -75,25 +77,25 @@ public class TransferenciaServiceImp implements TransferenciaService {
         if (dataFim != null && dataInicio != null && !nomeOperadorTransacao.isEmpty()) {
 
             return getAllBydataTransferenciaByContaByNomeOperador(dataInicio, dataFim, contaId,
-                    nomeOperadorTransacao.trim());
+                    nomeOperadorTransacao.trim(),pageable);
         }
 
-        List<Transferencia> transferencias = respository.findAllByIntervaloDataAndConta(dataInicio, dataFim, contaId);
+        Page<Transferencia> transferencias = respository.findAllByIntervaloDataAndConta(dataInicio, dataFim, contaId,pageable);
         return transferencias;
     }
 
     @Override
-    public List<Transferencia> getAllBydataTransferenciaByContaByNomeOperador(LocalDateTime dataInicio,
-            LocalDateTime dataFim, Long contaId, String nomeOperadorTransacao) {
-        List<Transferencia> transferencias = respository
-                .findAllByIntervaloDataAndNomeOperadorAndConta(dataInicio, dataFim, contaId, nomeOperadorTransacao);
+    public Page<Transferencia> getAllBydataTransferenciaByContaByNomeOperador(LocalDateTime dataInicio,
+            LocalDateTime dataFim, Long contaId, String nomeOperadorTransacao,Pageable pageable) {
+        Page<Transferencia> transferencias = respository
+                .findAllByIntervaloDataAndNomeOperadorAndConta(dataInicio, dataFim, contaId, nomeOperadorTransacao,pageable);
         return transferencias;
     }
 
     @Override
-    public List<Transferencia> getAllTransferenciaByNomeOperadorTransacao(String nomeOperadorTransacao, Long contaId) {
-        List<Transferencia> transferencias = respository.findByNomeOperadorTransacaoAndConta(nomeOperadorTransacao,
-                contaId);
+    public Page<Transferencia> getAllTransferenciaByNomeOperadorTransacao(String nomeOperadorTransacao, Long contaId , Pageable pageable) {
+        Page<Transferencia> transferencias = respository.findByNomeOperadorTransacaoAndConta(nomeOperadorTransacao,
+                contaId,pageable);
         return transferencias;
     }
 

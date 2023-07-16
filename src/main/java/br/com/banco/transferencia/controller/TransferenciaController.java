@@ -3,6 +3,8 @@ package br.com.banco.transferencia.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,20 +25,21 @@ public class TransferenciaController {
 
 
     @GetMapping("/conta/{idConta}")
-    public ResponseEntity<List<Transferencia>> getAllTransferenciaByConta(@PathVariable(name = "idConta") Long id) {
-        List<Transferencia> transferencias = service.getAllTransferenciaByConta(id);
+    public ResponseEntity<Page<Transferencia>> getAllTransferenciaByConta(@PathVariable(name = "idConta") Long id,Pageable pageable) {
+        Page<Transferencia> transferencias = service.getAllTransferenciaByConta(id,pageable);
         return ResponseEntity.ok().body(transferencias);
     }
 
     @GetMapping("/conta")
-    public ResponseEntity<List<Transferencia>> getAllTransferenciaByContaDtTransferencia(
+    public ResponseEntity<Page<Transferencia>> getAllTransferenciaByContaDtTransferencia(
             @RequestParam(name = "idConta") Long contaId,
             @RequestParam(name = "dataInicio") String dataInicioString,
             @RequestParam(name = "dataFim") String dataFimString,
-            @RequestParam(name = "nomeOperadorTransacao") String nomeOperadorTransacao
+            @RequestParam(name = "nomeOperadorTransacao") String nomeOperadorTransacao,
+           Pageable pageable
             ) {
 
-        List<Transferencia> transferencias = service.getAllBydataTransferenciaByConta(dataInicioString, dataFimString, contaId,nomeOperadorTransacao);
+        Page<Transferencia> transferencias = service.getAllBydataTransferenciaByConta(dataInicioString, dataFimString, contaId,nomeOperadorTransacao,pageable);
         return ResponseEntity.ok().body(transferencias);
     }
     @GetMapping("/conta/saldo/{idConta}")
